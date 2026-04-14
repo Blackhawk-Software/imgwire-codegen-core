@@ -36,4 +36,4 @@ jobs:
         run: yarn test
 
       - name: Publish Package
-        run: npm publish
+        run: npm publish --access public
