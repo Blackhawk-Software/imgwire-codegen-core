@@ -65,6 +65,14 @@ Arguments:
 - `x-codegen-sdk-pagination`
 - `x-codegen-sdk-stability`
 
+### Auth Values
+
+`x-codegen-sdk-auth` currently supports:
+
+- `server_key`
+- `client_key`
+- `server_or_client_key`
+
 ### Pagination
 
 When `x-codegen-sdk-pagination` is set to `offset_pagination`, the emitted SDK-shaped OpenAPI operation is annotated as paginated and successful responses are extended with these headers:

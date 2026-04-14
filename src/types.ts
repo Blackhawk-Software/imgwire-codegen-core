@@ -44,7 +44,7 @@ export type OpenAPIOperation = {
   "x-codegen-sdk-group-name"?: string;
   "x-codegen-sdk-method-name"?: string;
   "x-codegen-sdk-ignore"?: boolean;
-  "x-codegen-sdk-auth"?: "server" | "client" | "both";
+  "x-codegen-sdk-auth"?: "server_key" | "client_key" | "server_or_client_key";
   "x-codegen-sdk-pagination"?: "offset_headers" | "offset_pagination";
   "x-codegen-sdk-stability"?: "stable" | "beta" | "internal" | "deprecated";
   [key: string]: unknown;
@@ -113,7 +113,7 @@ export type SDKMethod = {
     method: HttpMethod;
     path: string;
   };
-  auth: "server" | "client" | "both";
+  auth: "server_key" | "client_key" | "server_or_client_key";
   pagination?: "offset_headers" | "offset_pagination";
   stability?: "stable" | "beta" | "internal" | "deprecated";
   request: SchemaRef;

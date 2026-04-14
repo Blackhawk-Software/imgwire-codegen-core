@@ -57,9 +57,13 @@ export function emitOpenApi(sdk: SDK, original: OpenAPISpec): OpenAPISpec {
       if (inclusion.pagination) {
         operation["x-codegen-sdk-pagination"] = "offset_pagination";
         injectPaginationHeaders(operation);
+      } else {
+        delete operation["x-codegen-sdk-pagination"];
       }
       if (inclusion.stability) {
         operation["x-codegen-sdk-stability"] = inclusion.stability;
+      } else {
+        delete operation["x-codegen-sdk-stability"];
       }
 
       hasOperation = true;
@@ -72,8 +76,32 @@ export function emitOpenApi(sdk: SDK, original: OpenAPISpec): OpenAPISpec {
 
   nextSpec.paths = nextPaths;
   nextSpec.tags = sdk.resources.map((resource) => ({ name: resource.name }));
+  pruneUnusedSchemas(nextSpec);
 
   return sortKeysDeep(nextSpec);
+}
+
+function pruneUnusedSchemas(spec: OpenAPISpec): void {
+  const components = spec.components;
+  if (!components || typeof components !== "object") {
+    return;
+  }
+
+  const allSchemas = getComponentSection(spec, "schemas");
+  if (!allSchemas) {
+    return;
+  }
+
+  const reachableRefs = collectReachableComponentRefs(spec.paths, spec);
+  const reachableSchemaNames = [...reachableRefs]
+    .filter((ref) => ref.startsWith("#/components/schemas/"))
+    .map((ref) => ref.slice("#/components/schemas/".length));
+
+  components.schemas = Object.fromEntries(
+    Object.entries(allSchemas)
+      .filter(([schemaName]) => reachableSchemaNames.includes(schemaName))
+      .sort(([left], [right]) => left.localeCompare(right))
+  );
 }
 
 function injectPaginationHeaders(operation: OpenAPIOperation): void {
@@ -106,6 +134,84 @@ function injectPaginationHeaders(operation: OpenAPIOperation): void {
 
 function isSuccessStatus(statusCode: string): boolean {
   return /^2\d\d$/.test(statusCode) || statusCode === "default";
+}
+
+function collectReachableComponentRefs(
+  value: unknown,
+  spec: OpenAPISpec,
+  seenRefs = new Set<string>(),
+  visitedValues = new WeakSet<object>()
+): Set<string> {
+  visitValue(value, spec, seenRefs, visitedValues);
+  return seenRefs;
+}
+
+function visitValue(
+  value: unknown,
+  spec: OpenAPISpec,
+  seenRefs: Set<string>,
+  visitedValues: WeakSet<object>
+): void {
+  if (Array.isArray(value)) {
+    for (const entry of value) {
+      visitValue(entry, spec, seenRefs, visitedValues);
+    }
+    return;
+  }
+
+  if (!value || typeof value !== "object") {
+    return;
+  }
+
+  if (visitedValues.has(value)) {
+    return;
+  }
+
+  visitedValues.add(value);
+
+  const ref = (value as { $ref?: unknown }).$ref;
+  if (typeof ref === "string" && ref.startsWith("#/components/")) {
+    if (!seenRefs.has(ref)) {
+      seenRefs.add(ref);
+      visitValue(resolveComponentRef(spec, ref), spec, seenRefs, visitedValues);
+    }
+  }
+
+  for (const nestedValue of Object.values(value as Record<string, unknown>)) {
+    visitValue(nestedValue, spec, seenRefs, visitedValues);
+  }
+}
+
+function resolveComponentRef(spec: OpenAPISpec, ref: string): unknown {
+  const parts = ref.replace(/^#\//, "").split("/");
+  let current: unknown = spec;
+
+  for (const part of parts) {
+    if (!current || typeof current !== "object") {
+      return undefined;
+    }
+
+    current = (current as Record<string, unknown>)[part];
+  }
+
+  return current;
+}
+
+function getComponentSection(
+  spec: OpenAPISpec,
+  section: string
+): Record<string, unknown> | undefined {
+  const components = spec.components;
+  if (!components || typeof components !== "object") {
+    return undefined;
+  }
+
+  const componentSection = (components as Record<string, unknown>)[section];
+  if (!componentSection || typeof componentSection !== "object") {
+    return undefined;
+  }
+
+  return componentSection as Record<string, unknown>;
 }
 
 const PAGINATION_HEADERS: Record<string, OpenAPIHeader> = {

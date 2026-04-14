@@ -42,6 +42,10 @@ Supporting utilities live under `src/utils/`.
   - `x-codegen-sdk-auth`
   - `x-codegen-sdk-pagination`
   - `x-codegen-sdk-stability`
+- `x-codegen-sdk-auth` currently uses these values:
+  - `server_key`
+  - `client_key`
+  - `server_or_client_key`
 - Pagination input currently accepts both `offset_pagination` and the legacy `offset_headers` marker. Emitted specs normalize to `offset_pagination`.
 - Paginated operations should emit the imgwire pagination response headers on successful responses:
   - `X-Total-Count`

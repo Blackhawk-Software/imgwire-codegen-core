@@ -10,15 +10,15 @@ export function filterByAuth(sdk: SDK, target: SDKTarget): SDK {
       .map((resource) => ({
         ...resource,
         methods: resource.methods.filter((method) => {
-          if (method.auth === "both") {
+          if (method.auth === "server_or_client_key") {
             return true;
           }
 
-          if (method.auth === "server") {
+          if (method.auth === "server_key") {
             return supportsServerAuth;
           }
 
-          return !supportsServerAuth || target === "node";
+          return !supportsServerAuth;
         })
       }))
       .filter((resource) => resource.methods.length > 0)

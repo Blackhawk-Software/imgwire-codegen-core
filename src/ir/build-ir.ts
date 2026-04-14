@@ -25,7 +25,7 @@ export function buildIR(spec: OpenAPISpec, config: BuildConfig): SDK {
     validateExtension(
       operation,
       "x-codegen-sdk-auth",
-      ["server", "client", "both"],
+      ["server_key", "client_key", "server_or_client_key"],
       config,
       path
     );
@@ -44,6 +44,25 @@ export function buildIR(spec: OpenAPISpec, config: BuildConfig): SDK {
       path
     );
 
+    const auth = getExtensionValue(
+      operation,
+      "x-codegen-sdk-auth",
+      ["server_key", "client_key", "server_or_client_key"],
+      "server_or_client_key"
+    );
+    const pagination = getExtensionValue(
+      operation,
+      "x-codegen-sdk-pagination",
+      ["offset_headers", "offset_pagination"],
+      undefined
+    );
+    const stability = getExtensionValue(
+      operation,
+      "x-codegen-sdk-stability",
+      ["stable", "beta", "internal", "deprecated"],
+      undefined
+    );
+
     const resourceName = resolveResourceName(path, operation);
     const sdkMethod: SDKMethod = {
       name: toCamelCase(
@@ -54,9 +73,9 @@ export function buildIR(spec: OpenAPISpec, config: BuildConfig): SDK {
         method,
         path
       },
-      auth: operation["x-codegen-sdk-auth"] ?? "both",
-      pagination: operation["x-codegen-sdk-pagination"],
-      stability: operation["x-codegen-sdk-stability"],
+      auth: auth ?? "server_or_client_key",
+      pagination,
+      stability,
       request: extractRequestSchema(operation),
       response: extractResponseSchema(operation),
       tags: [...(operation.tags ?? [])],
@@ -113,6 +132,25 @@ function validateExtension(
   }
 
   if (config.strict) {
-    throw new BuildError(`Invalid ${extensionKey} value on ${path}.`);
+    throw new BuildError(
+      `Invalid ${extensionKey} value on ${path}: ${JSON.stringify(value)}.`
+    );
   }
+}
+
+function getExtensionValue<const TValue extends string>(
+  operation: OpenAPIOperation,
+  extensionKey:
+    | "x-codegen-sdk-auth"
+    | "x-codegen-sdk-pagination"
+    | "x-codegen-sdk-stability",
+  allowedValues: readonly TValue[],
+  fallback: TValue | undefined
+): TValue | undefined {
+  const value = operation[extensionKey];
+  if (typeof value === "string" && allowedValues.includes(value as TValue)) {
+    return value as TValue;
+  }
+
+  return fallback;
 }

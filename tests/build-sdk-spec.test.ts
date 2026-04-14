@@ -62,7 +62,7 @@ const sourceSpec: OpenAPISpec = {
       get: {
         tags: ["admin"],
         "x-codegen-sdk-group-name": "admin uploads",
-        "x-codegen-sdk-auth": "server",
+        "x-codegen-sdk-auth": "server_key",
         responses: {
           "200": {
             description: "OK"
@@ -94,9 +94,30 @@ const sourceSpec: OpenAPISpec = {
   },
   components: {
     schemas: {
-      Upload: { type: "object" },
-      UploadList: { type: "object" },
-      CreateUploadRequest: { type: "object" }
+      Upload: {
+        type: "object",
+        properties: {
+          metadata: {
+            $ref: "#/components/schemas/UploadMetadata"
+          }
+        }
+      },
+      UploadList: {
+        type: "array",
+        items: {
+          $ref: "#/components/schemas/Upload"
+        }
+      },
+      UploadMetadata: {
+        type: "object",
+        properties: {
+          checksum: {
+            type: "string"
+          }
+        }
+      },
+      CreateUploadRequest: { type: "object" },
+      UnusedSchema: { type: "object" }
     }
   }
 };
@@ -132,6 +153,17 @@ test("buildSdkSpec shapes a client SDK spec deterministically", async () => {
     "X-Total-Count"
   ]);
   assert.deepEqual(result.tags, [{ name: "Uploads" }]);
+  assert.deepEqual(Object.keys(result.components?.schemas ?? {}), [
+    "CreateUploadRequest",
+    "Upload",
+    "UploadList",
+    "UploadMetadata"
+  ]);
+  const emittedSchemas = (result.components?.schemas ?? {}) as Record<
+    string,
+    unknown
+  >;
+  assert.equal(emittedSchemas["UnusedSchema"], undefined);
 
   const secondResult = await buildSdkSpec({
     target: "python",
@@ -179,7 +211,7 @@ test("strict mode rejects invalid vendor extensions", async () => {
         paths: {
           "/broken": {
             get: {
-              "x-codegen-sdk-auth": "invalid" as unknown as "server",
+              "x-codegen-sdk-auth": "invalid" as unknown as "server_key",
               responses: {
                 "200": { description: "OK" }
               }
@@ -192,6 +224,60 @@ test("strict mode rejects invalid vendor extensions", async () => {
       }
     })
   );
+});
+
+test("non-strict mode falls back when vendor extension values are invalid", async () => {
+  const result = await buildSdkSpec({
+    target: "js",
+    source: {
+      ...sourceSpec,
+      paths: {
+        "/fallback": {
+          get: {
+            tags: ["fallback"],
+            "x-codegen-sdk-auth": "invalid" as unknown as "server_key",
+            "x-codegen-sdk-pagination":
+              "invalid" as unknown as "offset_pagination",
+            "x-codegen-sdk-stability": "invalid" as unknown as "stable",
+            responses: {
+              "200": {
+                description: "OK"
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  const operation = result.paths["/fallback"]?.get;
+  assert.ok(operation);
+  assert.equal(operation["x-codegen-sdk-pagination"], undefined);
+  assert.equal(operation["x-codegen-sdk-stability"], undefined);
+});
+
+test("client_key operations are filtered out for server targets", async () => {
+  const result = await buildSdkSpec({
+    target: "node",
+    source: {
+      ...sourceSpec,
+      paths: {
+        "/client-only": {
+          get: {
+            tags: ["client-only"],
+            "x-codegen-sdk-auth": "client_key",
+            responses: {
+              "200": {
+                description: "OK"
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  assert.equal(result.paths["/client-only"], undefined);
 });
 
 test("legacy offset_headers pagination marker is normalized to offset_pagination", async () => {
