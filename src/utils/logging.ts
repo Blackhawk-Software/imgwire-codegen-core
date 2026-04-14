@@ -3,7 +3,11 @@ import { resolve } from "node:path";
 
 import type { BuildConfig } from "../types.js";
 
-export function debugLog(config: BuildConfig, step: string, payload?: unknown): void {
+export function debugLog(
+  config: BuildConfig,
+  step: string,
+  payload?: unknown
+): void {
   if (!config.debug) {
     return;
   }

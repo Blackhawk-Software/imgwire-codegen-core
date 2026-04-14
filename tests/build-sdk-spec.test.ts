@@ -104,8 +104,14 @@ test("buildSdkSpec shapes a client SDK spec deterministically", async () => {
   });
 
   assert.deepEqual(Object.keys(result.paths), ["/uploads"]);
-  assert.equal(result.paths["/uploads"]?.get?.operationId, "Uploads_listUploads");
-  assert.equal(result.paths["/uploads"]?.post?.operationId, "Uploads_createUpload");
+  assert.equal(
+    result.paths["/uploads"]?.get?.operationId,
+    "Uploads_listUploads"
+  );
+  assert.equal(
+    result.paths["/uploads"]?.post?.operationId,
+    "Uploads_createUpload"
+  );
   assert.deepEqual(result.paths["/uploads"]?.get?.tags, ["Uploads"]);
   assert.deepEqual(result.tags, [{ name: "Uploads" }]);
 
@@ -124,7 +130,10 @@ test("buildSdkSpec keeps server-auth operations for node targets", async () => {
   });
 
   assert.deepEqual(Object.keys(result.paths), ["/admin/uploads", "/uploads"]);
-  assert.equal(result.paths["/admin/uploads"]?.get?.operationId, "AdminUploads_getAdminUploads");
+  assert.equal(
+    result.paths["/admin/uploads"]?.get?.operationId,
+    "AdminUploads_getAdminUploads"
+  );
 });
 
 test("buildSdkSpec can retain internal operations when requested", async () => {
@@ -136,7 +145,11 @@ test("buildSdkSpec can retain internal operations when requested", async () => {
     }
   });
 
-  assert.deepEqual(Object.keys(result.paths), ["/admin/uploads", "/internal/health", "/uploads"]);
+  assert.deepEqual(Object.keys(result.paths), [
+    "/admin/uploads",
+    "/internal/health",
+    "/uploads"
+  ]);
 });
 
 test("strict mode rejects invalid vendor extensions", async () => {

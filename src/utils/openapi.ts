@@ -7,9 +7,7 @@ import type {
 
 import { HTTP_METHODS } from "./constants.js";
 
-export function getOperations(
-  spec: OpenAPISpec
-): Array<{
+export function getOperations(spec: OpenAPISpec): Array<{
   path: string;
   method: HttpMethod;
   operation: OpenAPIOperation;

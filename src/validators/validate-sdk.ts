@@ -12,18 +12,24 @@ export function validateSdk(sdk: SDK): void {
 
     for (const method of resource.methods) {
       if (!method.name) {
-        throw new BuildError(`SDK method on ${resource.name} is missing a name.`);
+        throw new BuildError(
+          `SDK method on ${resource.name} is missing a name.`
+        );
       }
 
       const emittedOperationId = `${resource.name}_${method.name}`;
       if (seenOperationIds.has(emittedOperationId)) {
-        throw new BuildError(`Duplicate emitted operationId detected: ${emittedOperationId}`);
+        throw new BuildError(
+          `Duplicate emitted operationId detected: ${emittedOperationId}`
+        );
       }
 
       seenOperationIds.add(emittedOperationId);
 
       if (method.pagination && method.pagination !== "offset_headers") {
-        throw new BuildError(`Unsupported pagination mode on ${method.http.method} ${method.http.path}`);
+        throw new BuildError(
+          `Unsupported pagination mode on ${method.http.method} ${method.http.path}`
+        );
       }
     }
   }

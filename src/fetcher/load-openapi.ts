@@ -5,7 +5,9 @@ import type { OpenAPISpec } from "../types.js";
 import { cloneJson } from "../utils/clone.js";
 import { BuildError } from "../utils/errors.js";
 
-export async function loadOpenApi(source: string | OpenAPISpec): Promise<OpenAPISpec> {
+export async function loadOpenApi(
+  source: string | OpenAPISpec
+): Promise<OpenAPISpec> {
   if (typeof source !== "string") {
     return cloneJson(source);
   }
@@ -13,7 +15,9 @@ export async function loadOpenApi(source: string | OpenAPISpec): Promise<OpenAPI
   if (/^https?:\/\//.test(source)) {
     const response = await fetch(source);
     if (!response.ok) {
-      throw new BuildError(`Failed to fetch OpenAPI spec: ${response.status} ${response.statusText}`);
+      throw new BuildError(
+        `Failed to fetch OpenAPI spec: ${response.status} ${response.statusText}`
+      );
     }
 
     return parseOpenApi(await response.text(), source);

@@ -1,6 +1,15 @@
-import type { BuildConfig, OpenAPIOperation, OpenAPISpec, SDK, SDKMethod } from "../types.js";
+import type {
+  BuildConfig,
+  OpenAPIOperation,
+  OpenAPISpec,
+  SDK,
+  SDKMethod
+} from "../types.js";
 
-import { extractRequestSchema, extractResponseSchema } from "../utils/schema-ref.js";
+import {
+  extractRequestSchema,
+  extractResponseSchema
+} from "../utils/schema-ref.js";
 import { deriveResourceName, toCamelCase } from "../utils/naming.js";
 import { getOperations } from "../utils/openapi.js";
 import { BuildError } from "../utils/errors.js";
@@ -13,8 +22,20 @@ export function buildIR(spec: OpenAPISpec, config: BuildConfig): SDK {
       continue;
     }
 
-    validateExtension(operation, "x-codegen-sdk-auth", ["server", "client", "both"], config, path);
-    validateExtension(operation, "x-codegen-sdk-pagination", ["offset_headers"], config, path);
+    validateExtension(
+      operation,
+      "x-codegen-sdk-auth",
+      ["server", "client", "both"],
+      config,
+      path
+    );
+    validateExtension(
+      operation,
+      "x-codegen-sdk-pagination",
+      ["offset_headers"],
+      config,
+      path
+    );
     validateExtension(
       operation,
       "x-codegen-sdk-stability",
@@ -25,7 +46,9 @@ export function buildIR(spec: OpenAPISpec, config: BuildConfig): SDK {
 
     const resourceName = resolveResourceName(path, operation);
     const sdkMethod: SDKMethod = {
-      name: toCamelCase(operation["x-codegen-sdk-method-name"] ?? operation.operationId ?? ""),
+      name: toCamelCase(
+        operation["x-codegen-sdk-method-name"] ?? operation.operationId ?? ""
+      ),
       operationId: operation.operationId ?? "",
       http: {
         method,
@@ -60,7 +83,10 @@ export function buildIR(spec: OpenAPISpec, config: BuildConfig): SDK {
   };
 }
 
-function resolveResourceName(path: string, operation: OpenAPIOperation): string {
+function resolveResourceName(
+  path: string,
+  operation: OpenAPIOperation
+): string {
   const explicitGroup = operation["x-codegen-sdk-group-name"];
   const tagGroup = operation.tags?.[0];
 

@@ -24,7 +24,9 @@ export type {
   SDKTarget
 } from "./types.js";
 
-export async function buildSdkSpec(options: BuildSdkSpecOptions): Promise<OpenAPISpec> {
+export async function buildSdkSpec(
+  options: BuildSdkSpecOptions
+): Promise<OpenAPISpec> {
   const config = options.config ?? {};
 
   debugLog(config, "loading-openapi");
@@ -50,7 +52,9 @@ export async function buildSdkSpec(options: BuildSdkSpecOptions): Promise<OpenAP
         resources: transformed.resources
           .map((resource) => ({
             ...resource,
-            methods: resource.methods.filter((method) => method.stability !== "internal")
+            methods: resource.methods.filter(
+              (method) => method.stability !== "internal"
+            )
           }))
           .filter((resource) => resource.methods.length > 0)
       };

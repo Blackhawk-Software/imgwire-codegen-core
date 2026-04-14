@@ -9,10 +9,7 @@ export function toCamelCase(input: string): string {
     return "unnamedMethod";
   }
 
-  return [
-    words[0]!.toLowerCase(),
-    ...words.slice(1).map(capitalize)
-  ].join("");
+  return [words[0]!.toLowerCase(), ...words.slice(1).map(capitalize)].join("");
 }
 
 export function deriveResourceName(pathname: string): string {

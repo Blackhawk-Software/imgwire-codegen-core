@@ -51,7 +51,9 @@ export function extractResponseSchema(operation: OpenAPIOperation): SchemaRef {
   };
 }
 
-function pickResponseStatusCode(responses: Record<string, unknown>): string | undefined {
+function pickResponseStatusCode(
+  responses: Record<string, unknown>
+): string | undefined {
   return Object.keys(responses)
     .sort((left, right) => {
       const leftNumeric = Number.parseInt(left, 10);

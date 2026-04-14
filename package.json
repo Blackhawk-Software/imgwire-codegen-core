@@ -18,10 +18,12 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "format": "prettier --write .",
     "test": "yarn build && node --test dist/tests/**/*.test.js"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.3"
   }
 }
