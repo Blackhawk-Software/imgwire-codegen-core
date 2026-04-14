@@ -1,6 +1,6 @@
 {
   "name": "@imgwire/codegen-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Deterministic OpenAPI shaping pipeline for imgwire SDKs.",
   "license": "UNLICENSED",
   "packageManager": "yarn@1.19.1",
