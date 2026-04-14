@@ -1,13 +1,16 @@
 export type SDKTarget =
   | "js"
+  | "react"
+  | "react-native"
   | "node"
   | "python"
   | "go"
   | "ruby"
   | "java"
-  | "csharp"
+  | "c-sharp"
   | "ios"
-  | "android";
+  | "android"
+  | "rust";
 
 export type BuildConfig = {
   includeInternal?: boolean;

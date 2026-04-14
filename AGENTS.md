@@ -31,8 +31,20 @@ Supporting utilities live under `src/utils/`.
 ## Key Implementation Assumptions
 
 - Input parsing is currently JSON-only. Local files and remote URLs are expected to contain JSON.
-- `node` is currently treated as the server-capable SDK target for auth filtering.
-- Other listed targets are currently treated as client targets.
+- Client targets are currently:
+  - `js`
+  - `react`
+  - `react-native`
+  - `ios`
+  - `android`
+- Server targets are currently:
+  - `node`
+  - `python`
+  - `ruby`
+  - `c-sharp`
+  - `java`
+  - `go`
+  - `rust`
 - Determinism matters more than cleverness. Stable ordering should be preserved for paths, tags, methods, and object keys.
 - Unknown vendor extensions should generally be ignored unless the requested change says otherwise.
 - Supported vendor extensions today are:

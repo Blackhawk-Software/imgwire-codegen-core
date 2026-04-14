@@ -32,14 +32,17 @@ const spec = await buildSdkSpec({
 ```ts
 type SDKTarget =
   | "js"
+  | "react"
+  | "react-native"
   | "node"
   | "python"
   | "go"
   | "ruby"
   | "java"
-  | "csharp"
+  | "c-sharp"
   | "ios"
-  | "android";
+  | "android"
+  | "rust";
 
 type BuildConfig = {
   includeInternal?: boolean;

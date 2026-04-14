@@ -11,7 +11,15 @@ export const HTTP_METHODS: HttpMethod[] = [
   "trace"
 ];
 
-const SERVER_TARGETS = new Set<SDKTarget>(["node"]);
+const SERVER_TARGETS = new Set<SDKTarget>([
+  "node",
+  "python",
+  "ruby",
+  "c-sharp",
+  "java",
+  "go",
+  "rust"
+]);
 
 export function targetSupportsServerAuth(target: SDKTarget): boolean {
   return SERVER_TARGETS.has(target);

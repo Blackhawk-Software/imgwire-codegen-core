@@ -124,7 +124,7 @@ const sourceSpec: OpenAPISpec = {
 
 test("buildSdkSpec shapes a client SDK spec deterministically", async () => {
   const result = await buildSdkSpec({
-    target: "python",
+    target: "js",
     source: sourceSpec
   });
 
@@ -166,7 +166,7 @@ test("buildSdkSpec shapes a client SDK spec deterministically", async () => {
   assert.equal(emittedSchemas["UnusedSchema"], undefined);
 
   const secondResult = await buildSdkSpec({
-    target: "python",
+    target: "js",
     source: sourceSpec
   });
 
