@@ -1,4 +1,5 @@
 dist/
+dist-tests/
 node_modules/
 .imgwire-codegen-core-debug/
 scripts/local-openapi-smoke.mjs

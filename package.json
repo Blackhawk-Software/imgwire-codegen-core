@@ -7,6 +7,9 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -17,9 +20,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rm -rf dist dist-tests && tsc -p tsconfig.build.json",
     "format": "prettier --write .",
-    "test": "yarn build && node --test dist/tests/**/*.test.js"
+    "prepack": "yarn build",
+    "test": "yarn build && tsc -p tsconfig.test.json && node --test dist-tests/tests/**/*.test.js"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",

@@ -5,13 +5,10 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
     "strict": true,
-    "declaration": true,
-    "outDir": "dist",
-    "rootDir": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.mjs"]
 }
