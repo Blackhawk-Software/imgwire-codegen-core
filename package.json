@@ -23,6 +23,8 @@
     "build": "rm -rf dist dist-tests && tsc -p tsconfig.build.json",
     "format": "prettier --write .",
     "prepack": "yarn build",
+    "release:prepare": "node scripts/release.mjs prepare",
+    "release:verify-tag": "node scripts/release.mjs verify-tag",
     "test": "yarn build && tsc -p tsconfig.test.json && node --test dist-tests/tests/**/*.test.js"
   },
   "devDependencies": {

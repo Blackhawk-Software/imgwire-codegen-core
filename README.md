@@ -124,6 +124,22 @@ Run tests:
 yarn test
 ```
 
+## Releases
+
+Prepare a new release locally by updating `package.json`:
+
+```bash
+yarn release:prepare 0.2.0
+```
+
+Then commit the version bump, push it, and publish a GitHub release with tag `v0.2.0`.
+
+GitHub Actions will publish the package to npm when a GitHub release is published, after:
+
+- installing dependencies
+- verifying that the GitHub tag matches `package.json`
+- running `yarn test`
+
 ## Current Scope
 
 This package is focused on deterministic OpenAPI shaping only. It does not run OpenAPI Generator, post-process generated SDK code, or handle publishing workflows.
