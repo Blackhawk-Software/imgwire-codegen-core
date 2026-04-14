@@ -140,6 +140,16 @@ GitHub Actions will publish the package to npm when a GitHub release is publishe
 - verifying that the GitHub tag matches `package.json`
 - running `yarn test`
 
+This repository is configured for npm trusted publishing with GitHub Actions OIDC, so the publish workflow should not use a long-lived npm automation token for `npm publish`.
+
+Before the workflow can publish successfully, configure a trusted publisher for this package on npm:
+
+- provider: GitHub Actions
+- repository: this repository
+- workflow filename: `release.yml`
+
+If you use npm package settings hardening after setup, npm recommends restricting token-based publishing access once trusted publishing is verified.
+
 ## Current Scope
 
 This package is focused on deterministic OpenAPI shaping only. It does not run OpenAPI Generator, post-process generated SDK code, or handle publishing workflows.
