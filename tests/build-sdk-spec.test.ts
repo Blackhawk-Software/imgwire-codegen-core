@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { buildSdkSpec, type OpenAPISpec } from "../src/index.js";
+import {
+  buildSdkSpec,
+  type OpenAPIResponse,
+  type OpenAPISpec
+} from "../src/index.js";
 
 const sourceSpec: OpenAPISpec = {
   openapi: "3.1.0",
@@ -14,7 +18,7 @@ const sourceSpec: OpenAPISpec = {
       get: {
         operationId: "listUploads",
         tags: ["uploads"],
-        "x-codegen-sdk-pagination": "offset_headers",
+        "x-codegen-sdk-pagination": "offset_pagination",
         responses: {
           "200": {
             description: "OK",
@@ -113,6 +117,20 @@ test("buildSdkSpec shapes a client SDK spec deterministically", async () => {
     "Uploads_createUpload"
   );
   assert.deepEqual(result.paths["/uploads"]?.get?.tags, ["Uploads"]);
+  assert.equal(
+    result.paths["/uploads"]?.get?.["x-codegen-sdk-pagination"],
+    "offset_pagination"
+  );
+  const paginatedResponse = result.paths["/uploads"]?.get?.responses?.[
+    "200"
+  ] as OpenAPIResponse;
+  assert.deepEqual(Object.keys(paginatedResponse.headers ?? {}), [
+    "X-Limit",
+    "X-Next-Page",
+    "X-Page",
+    "X-Prev-Page",
+    "X-Total-Count"
+  ]);
   assert.deepEqual(result.tags, [{ name: "Uploads" }]);
 
   const secondResult = await buildSdkSpec({
@@ -174,4 +192,35 @@ test("strict mode rejects invalid vendor extensions", async () => {
       }
     })
   );
+});
+
+test("legacy offset_headers pagination marker is normalized to offset_pagination", async () => {
+  const result = await buildSdkSpec({
+    target: "js",
+    source: {
+      ...sourceSpec,
+      paths: {
+        "/legacy": {
+          get: {
+            tags: ["legacy"],
+            "x-codegen-sdk-pagination": "offset_headers",
+            responses: {
+              "200": {
+                description: "OK"
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  assert.equal(
+    result.paths["/legacy"]?.get?.["x-codegen-sdk-pagination"],
+    "offset_pagination"
+  );
+  const legacyResponse = result.paths["/legacy"]?.get?.responses?.[
+    "200"
+  ] as OpenAPIResponse;
+  assert.ok(legacyResponse.headers?.["X-Total-Count"]);
 });

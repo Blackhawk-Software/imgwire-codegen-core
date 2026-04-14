@@ -45,7 +45,7 @@ export type OpenAPIOperation = {
   "x-codegen-sdk-method-name"?: string;
   "x-codegen-sdk-ignore"?: boolean;
   "x-codegen-sdk-auth"?: "server" | "client" | "both";
-  "x-codegen-sdk-pagination"?: "offset_headers";
+  "x-codegen-sdk-pagination"?: "offset_headers" | "offset_pagination";
   "x-codegen-sdk-stability"?: "stable" | "beta" | "internal" | "deprecated";
   [key: string]: unknown;
 };
@@ -62,6 +62,19 @@ export type OpenAPIPathItem = {
   head?: OpenAPIOperation;
   patch?: OpenAPIOperation;
   trace?: OpenAPIOperation;
+  [key: string]: unknown;
+};
+
+export type OpenAPIHeader = {
+  description?: string;
+  schema?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+export type OpenAPIResponse = {
+  description?: string;
+  headers?: Record<string, OpenAPIHeader>;
+  content?: Record<string, unknown>;
   [key: string]: unknown;
 };
 
@@ -101,7 +114,7 @@ export type SDKMethod = {
     path: string;
   };
   auth: "server" | "client" | "both";
-  pagination?: "offset_headers";
+  pagination?: "offset_headers" | "offset_pagination";
   stability?: "stable" | "beta" | "internal" | "deprecated";
   request: SchemaRef;
   response: SchemaRef;

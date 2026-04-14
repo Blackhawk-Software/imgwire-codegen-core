@@ -42,6 +42,13 @@ Supporting utilities live under `src/utils/`.
   - `x-codegen-sdk-auth`
   - `x-codegen-sdk-pagination`
   - `x-codegen-sdk-stability`
+- Pagination input currently accepts both `offset_pagination` and the legacy `offset_headers` marker. Emitted specs normalize to `offset_pagination`.
+- Paginated operations should emit the imgwire pagination response headers on successful responses:
+  - `X-Total-Count`
+  - `X-Page`
+  - `X-Limit`
+  - `X-Prev-Page`
+  - `X-Next-Page`
 
 ## Change Guidelines
 

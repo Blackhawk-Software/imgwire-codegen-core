@@ -65,6 +65,20 @@ Arguments:
 - `x-codegen-sdk-pagination`
 - `x-codegen-sdk-stability`
 
+### Pagination
+
+When `x-codegen-sdk-pagination` is set to `offset_pagination`, the emitted SDK-shaped OpenAPI operation is annotated as paginated and successful responses are extended with these headers:
+
+- `X-Total-Count`
+- `X-Page`
+- `X-Limit`
+- `X-Prev-Page`
+- `X-Next-Page`
+
+For backward compatibility, the older `offset_headers` value is still accepted on input and normalized to `offset_pagination` on output.
+
+This package only shapes the OpenAPI contract. SDK conveniences such as `listPages()` async iterators should be generated downstream from the emitted pagination metadata.
+
 ## Package Structure
 
 ```text

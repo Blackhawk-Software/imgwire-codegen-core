@@ -32,7 +32,7 @@ export function buildIR(spec: OpenAPISpec, config: BuildConfig): SDK {
     validateExtension(
       operation,
       "x-codegen-sdk-pagination",
-      ["offset_headers"],
+      ["offset_headers", "offset_pagination"],
       config,
       path
     );

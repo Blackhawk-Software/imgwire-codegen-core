@@ -15,8 +15,10 @@ import { validateSdk } from "./validators/validate-sdk.js";
 export type {
   BuildConfig,
   BuildSdkSpecOptions,
+  OpenAPIHeader,
   OpenAPIOperation,
   OpenAPIPathItem,
+  OpenAPIResponse,
   OpenAPISpec,
   SDK,
   SDKMethod,

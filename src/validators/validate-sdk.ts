@@ -26,7 +26,11 @@ export function validateSdk(sdk: SDK): void {
 
       seenOperationIds.add(emittedOperationId);
 
-      if (method.pagination && method.pagination !== "offset_headers") {
+      if (
+        method.pagination &&
+        method.pagination !== "offset_headers" &&
+        method.pagination !== "offset_pagination"
+      ) {
         throw new BuildError(
           `Unsupported pagination mode on ${method.http.method} ${method.http.path}`
         );
