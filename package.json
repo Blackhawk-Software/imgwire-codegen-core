@@ -2,6 +2,7 @@
   "name": "@imgwire/codegen-core",
   "version": "0.1.0",
   "description": "Deterministic OpenAPI shaping pipeline for imgwire SDKs.",
+  "packageManager": "yarn@1.19.1",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && node --test dist/tests/**/*.test.js"
+    "test": "yarn build && node --test dist/tests/**/*.test.js"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",

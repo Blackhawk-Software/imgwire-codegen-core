@@ -84,19 +84,19 @@ tests/
 Install dependencies:
 
 ```bash
-npm install
+yarn install
 ```
 
 Build the package:
 
 ```bash
-npm run build
+yarn build
 ```
 
 Run tests:
 
 ```bash
-npm test
+yarn test
 ```
 
 ## Current Scope

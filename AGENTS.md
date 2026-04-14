@@ -54,7 +54,7 @@ Supporting utilities live under `src/utils/`.
 
 ## Testing Expectations
 
-- Run `npm test` after meaningful code changes.
+- Run `yarn test` after meaningful code changes.
 - Add or update tests in `tests/build-sdk-spec.test.ts` when changing shaping behavior.
 - Prefer focused behavioral tests over broad snapshots unless snapshots clearly improve signal.
 
