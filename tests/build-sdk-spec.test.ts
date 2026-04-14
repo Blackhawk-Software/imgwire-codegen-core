@@ -224,3 +224,48 @@ test("legacy offset_headers pagination marker is normalized to offset_pagination
   ] as OpenAPIResponse;
   assert.ok(legacyResponse.headers?.["X-Total-Count"]);
 });
+
+test("existing pagination headers are preserved and only missing ones are added", async () => {
+  const result = await buildSdkSpec({
+    target: "js",
+    source: {
+      ...sourceSpec,
+      paths: {
+        "/images": {
+          get: {
+            tags: ["images"],
+            "x-codegen-sdk-pagination": "offset_pagination",
+            responses: {
+              "200": {
+                description: "OK",
+                headers: {
+                  "X-Total-Count": {
+                    description: "Server-provided total count description.",
+                    schema: {
+                      type: "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  const response = result.paths["/images"]?.get?.responses?.[
+    "200"
+  ] as OpenAPIResponse;
+  assert.equal(
+    response.headers?.["X-Total-Count"]?.description,
+    "Server-provided total count description."
+  );
+  assert.deepEqual(response.headers?.["X-Total-Count"]?.schema, {
+    type: "string"
+  });
+  assert.ok(response.headers?.["X-Page"]);
+  assert.ok(response.headers?.["X-Limit"]);
+  assert.ok(response.headers?.["X-Prev-Page"]);
+  assert.ok(response.headers?.["X-Next-Page"]);
+});

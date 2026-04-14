@@ -91,10 +91,16 @@ function injectPaginationHeaders(operation: OpenAPIOperation): void {
     }
 
     const typedResponse = response as OpenAPIResponse;
-    typedResponse.headers = {
-      ...PAGINATION_HEADERS,
-      ...(typedResponse.headers ?? {})
-    };
+    const existingHeaders = typedResponse.headers ?? {};
+
+    typedResponse.headers = { ...existingHeaders };
+    for (const [headerName, headerSchema] of Object.entries(
+      PAGINATION_HEADERS
+    )) {
+      if (!typedResponse.headers[headerName]) {
+        typedResponse.headers[headerName] = cloneJson(headerSchema);
+      }
+    }
   }
 }
 
