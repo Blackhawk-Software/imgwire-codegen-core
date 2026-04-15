@@ -3,6 +3,14 @@
   "version": "0.1.3",
   "description": "Deterministic OpenAPI shaping pipeline for imgwire SDKs.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blackhawk-Software/imgwire-codegen-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Blackhawk-Software/imgwire-codegen-core/issues"
+  },
+  "homepage": "https://github.com/Blackhawk-Software/imgwire-codegen-core#readme",
   "packageManager": "yarn@1.19.1",
   "type": "module",
   "main": "./dist/index.js",
