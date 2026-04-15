@@ -59,6 +59,10 @@ Arguments:
 - `config.strict`: throws on invalid supported vendor extension values.
 - `config.debug`: logs pipeline steps and writes intermediate artifacts to `.imgwire-codegen-core-debug/`.
 
+Behavior notes:
+
+- Header parameters named `X-Environment-Id` are removed during normalization and are not emitted in SDK-shaped OpenAPI output.
+
 ## Supported Vendor Extensions
 
 - `x-codegen-sdk-group-name`

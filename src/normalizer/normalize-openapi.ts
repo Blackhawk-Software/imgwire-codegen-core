@@ -57,6 +57,10 @@ function normalizeParameters(
   const deduped = new Map<string, OpenAPIParameter>();
 
   for (const parameter of parameters) {
+    if (shouldOmitParameter(parameter)) {
+      continue;
+    }
+
     const key = `${parameter.in}:${parameter.name}`;
     if (!deduped.has(key)) {
       deduped.set(key, parameter);
@@ -68,6 +72,13 @@ function normalizeParameters(
     const rightKey = `${right.in}:${right.name}`;
     return leftKey.localeCompare(rightKey);
   });
+}
+
+function shouldOmitParameter(parameter: OpenAPIParameter): boolean {
+  return (
+    parameter.in === "header" &&
+    parameter.name.trim().toLowerCase() === "x-environment-id"
+  );
 }
 
 function handleInvalid(config: BuildConfig, message: string): void {

@@ -355,3 +355,60 @@ test("existing pagination headers are preserved and only missing ones are added"
   assert.ok(response.headers?.["X-Prev-Page"]);
   assert.ok(response.headers?.["X-Next-Page"]);
 });
+
+test("X-Environment-Id header parameters are removed from emitted SDK specs", async () => {
+  const result = await buildSdkSpec({
+    target: "js",
+    source: {
+      ...sourceSpec,
+      paths: {
+        "/images": {
+          parameters: [
+            {
+              in: "header",
+              name: "X-Environment-Id",
+              required: true,
+              schema: {
+                type: "string"
+              }
+            }
+          ],
+          get: {
+            tags: ["images"],
+            parameters: [
+              {
+                in: "header",
+                name: "X-Request-Id",
+                schema: {
+                  type: "string"
+                }
+              },
+              {
+                in: "header",
+                name: "x-environment-id",
+                schema: {
+                  type: "string"
+                }
+              }
+            ],
+            responses: {
+              "200": {
+                description: "OK"
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  assert.deepEqual(result.paths["/images"]?.get?.parameters, [
+    {
+      in: "header",
+      name: "X-Request-Id",
+      schema: {
+        type: "string"
+      }
+    }
+  ]);
+});
