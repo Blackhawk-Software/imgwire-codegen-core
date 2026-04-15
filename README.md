@@ -1,5 +1,8 @@
 # imgwire-codegen-core
 
+[![npm version](https://img.shields.io/npm/v/%40imgwire%2Fcodegen-core)](https://www.npmjs.com/package/@imgwire/codegen-core)
+[![GitHub Actions Workflow Status](https://github.com/Blackhawk-Software/imgwire-codegen-core/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/Blackhawk-Software/imgwire-codegen-core/actions/workflows/release.yml)
+
 `imgwire-codegen-core` is the shared TypeScript package that shapes raw OpenAPI specs into deterministic, SDK-optimized OpenAPI output for imgwire SDK generation.
 
 ## What It Does
