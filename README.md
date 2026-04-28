@@ -1,9 +1,15 @@
-# imgwire-codegen-core
+![imgwire.dev Logo](https://cdn.imgwire.dev/6b024480-a5ac-426d-b539-2e4fccc4c6ac/26f80c13-48bd-4bb9-866e-5e9392b11a6a/4ba5fe50-433b-40db-a847-938d2081c21a?w=280&quality=80)
+
+# `imgwire-codegen-core`
 
 [![npm version](https://img.shields.io/npm/v/%40imgwire%2Fcodegen-core)](https://www.npmjs.com/package/@imgwire/codegen-core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Actions Workflow Status](https://github.com/Blackhawk-Software/imgwire-codegen-core/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/Blackhawk-Software/imgwire-codegen-core/actions/workflows/release.yml)
 
 `imgwire-codegen-core` is the shared TypeScript package that shapes raw OpenAPI specs into deterministic, SDK-optimized OpenAPI output for imgwire SDK generation.
+
+> [!TIP]
+> Obtain an API key by signing up at [imgwire.dev](https://imgwire.dev). Read the full API & SDK documentation [here](https://docs.imgwire.dev/guides/backend-quickstart).
 
 ## What It Does
 
